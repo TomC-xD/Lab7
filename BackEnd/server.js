@@ -32,11 +32,16 @@ app.get('/api/movies', async (req, res) => { //Movie stored
     res.status(200).json({movies}) //Respond with the JSON
   });
   
+  app.get('/api/movies/:id', async (req,res) => {
+    const movie = await movieModel.findById(req.params.id);
+    res.json(movie);
+  })
+
   app.post('/api/movies', async (req, res)=>{
     
     const { title, year, poster } = req.body;
  
-  const newMovie = new Movie({ title, year, poster });
+  const newMovie = new movieModel({ title, year, poster });
   await newMovie.save();
   
   res.status(201).json({ message: 'Movie created successfully', movie: newMovie });
