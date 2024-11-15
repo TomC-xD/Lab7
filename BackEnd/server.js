@@ -16,9 +16,12 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//Connect to MongoDB and link database
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://admin:admin@cluster0.9dmwv.mongodb.net/DB24');
 
+
+//Define schema and data model
 const movieSchema = new mongoose.Schema({
   title:String,
   year:String,
@@ -27,16 +30,18 @@ const movieSchema = new mongoose.Schema({
 
 const movieModel = new mongoose.model('myMovies', movieSchema);
 
+//fetch movie records
 app.get('/api/movies', async (req, res) => { //Movie stored
     const movies = await movieModel.find({});
     res.status(200).json({movies}) //Respond with the JSON
   });
-  
+  //retrieve specific movie by its ID
   app.get('/api/movies/:id', async (req,res) => {
     const movie = await movieModel.findById(req.params.id);
     res.json(movie);
   })
 
+  //method to add new movie records
   app.post('/api/movies', async (req, res)=>{
     
     const { title, year, poster } = req.body;
